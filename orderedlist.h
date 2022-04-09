@@ -48,6 +48,36 @@ void displayList(struct ListElement *list){
     }
 }
 
+void deleteElement(ListElement** head_ref, int key){
+
+    // Store head node
+    ListElement* temp = *head_ref;
+    ListElement* prev = NULL;
+
+    // If head node itself holds
+    // the key to be deleted
+    if (temp != NULL && temp->ID == key){
+        *head_ref = temp->next; // Changed head
+        delete temp;            // free old head
+        return;
+    }
+    else
+    {
+        while (temp != NULL && temp->ID != key)
+        {
+            prev = temp;
+            temp = temp->next;
+        }
+
+        // Nothing happens if key not found
+        if (temp == NULL)
+            return;
+
+        prev->next = temp->next;
+        delete temp;
+    }
+}
+
 ListElement* FindByID(struct ListElement *list, int ID){
     while (list != NULL)
     {
