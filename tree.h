@@ -29,6 +29,19 @@ TreeNode *insert(TreeNode *root, string name, string surname, int ID){
     return root;
 }
 
+TreeNode *findByID(TreeNode *root, int ID){
+    if(root->ID == ID)
+        return root;
+
+    if(root == NULL)
+        return NULL;
+
+    if(ID > root->ID)
+        return findByID(root->right, ID);
+    else
+        return findByID(root->left, ID);
+}
+
 TreeNode *minValueNode(TreeNode *node) {
     TreeNode *current = node;
 

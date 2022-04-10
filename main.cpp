@@ -2,34 +2,39 @@
 #include <fstream>
 #include <vector>
 #include <algorithm>
-#include <numeric>
+#include <chrono>
 
 #include "orderedlist.h"
 #include "tree.h"
 
 using namespace std;
+using namespace std::chrono;
 
 int main(){
-    bool DL = false, BST = true;
+    bool DL = true, BST = true, balanced = true;
 
-    int records = 1000;
-    vector<int> v(records/10);
-    iota(v.begin(), v.end(), 1000000);
-    random_shuffle(v.begin(), v.end());
+    vector<int> v;
 
-    //^-Random IDs for deletion
-
-    
-    ifstream inData;
+    ifstream inData; // ifstream - input file stream
     inData.open("C:\\Users\\samue\\Documents\\BST AND DL\\outputTest_1.txt");
     string inputName, inputSurname;
     int inputID; //temporary variables from input
-    if(DL) {
 
+    while (inData >> inputName >> inputSurname >> inputID) {
+        v.push_back(inputID);
+    }
+
+    random_shuffle(v.begin(), v.end());
+
+
+    if(DL) {
         ListElement* head = NULL;
         ListElement* temp;
 
-        //displayList(head);
+        inData.clear();
+        inData.seekg(0);
+
+        auto start = system_clock::now();
 
         while (inData >> inputName >> inputSurname >> inputID) {
             //cout<<inputName<<" "<<inputSurname<<" "<<inputID<<"\n";
@@ -38,38 +43,54 @@ int main(){
                 append(&head, inputName, inputSurname, inputID);
             } else
                 insertAfter(temp, inputName, inputSurname, inputID);
-
         }
-        displayList(head);
+
+        auto end = system_clock::now();
+        auto elapsed = duration_cast <microseconds>(end - start);
+
+        cout << elapsed.count() << " micros to create a DL\n";
+//        displayList(head);
+
+        start = system_clock::now();
+        for(int x : v){
+            deleteElement(&head, x);
+        }
+        end = system_clock::now();
+        elapsed = duration_cast <microseconds>(end - start);
+
+        cout << elapsed.count() << " micros to delete everything-random order\n";
+
     }
 
     if(BST){
         TreeNode* root = NULL;
-        //TreeNode* Ttemp;
 
-        //if(DL){
-            inData.clear();
-            inData.seekg(0);
-        //}
+        inData.clear();
+        inData.seekg(0);
+
+        auto start = system_clock::now();
         while (inData >> inputName >> inputSurname >> inputID) {
             //cout<<inputName<<" "<<inputSurname<<" "<<inputID<<"\n";
             root = insert(root, inputName, inputSurname, inputID);
         }
-        root = deleteNode(root, 1000096);
-        cout<<"\ninorder: \n";
-        inorder(root);
-        cout<<"\npostorder: \n";
-        postorder(root);
-        cout<<"\npreorder: \n";
-        preorder(root);
+        auto end = system_clock::now();
+        auto elapsed = duration_cast <microseconds>(end - start);
+        cout << elapsed.count() << " micros to create a BST\n";
 
-        root = buildTree(root);
-        cout<<"\nBalanced inorder: \n";
-        inorder(root);
-        cout<<"\nBalanced postorder: \n";
-        postorder(root);
-        cout<<"\nBalanced preorder: \n";
-        preorder(root);
+        if(balanced){
+            root = buildTree(root);
+        }
+
+        start = system_clock::now();
+        for(int x : v){
+            root = deleteNode(root, x);
+        }
+        end = system_clock::now();
+        elapsed = duration_cast <microseconds>(end - start);
+
+        cout << elapsed.count() << " micros to delete everything-random order\n";
+        //inorder(root);
+
 
     }
 
