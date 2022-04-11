@@ -16,7 +16,7 @@ int main(){
     vector<int> v;
 
     ifstream inData; // ifstream - input file stream
-    inData.open("C:\\Users\\samue\\Documents\\BST AND DL\\outputTest_1.txt");
+    inData.open("C:\\Users\\samue\\Documents\\BST AND DL\\outputs\\outputTest_10.txt");
     string inputName, inputSurname;
     int inputID; //temporary variables from input
 
@@ -53,11 +53,19 @@ int main(){
 
         start = system_clock::now();
         for(int x : v){
+            FindByID(head, x);
+        }
+        end = system_clock::now();
+        elapsed = duration_cast <microseconds>(end - start);
+        cout << elapsed.count() << " micros to Find in DL\n";
+
+
+        start = system_clock::now();
+        for(int x : v){
             deleteElement(&head, x);
         }
         end = system_clock::now();
         elapsed = duration_cast <microseconds>(end - start);
-
         cout << elapsed.count() << " micros to delete everything-random order\n";
 
     }
@@ -80,6 +88,14 @@ int main(){
         if(balanced){
             root = buildTree(root);
         }
+        TreeNode *found;
+        start = system_clock::now();
+        for(int x : v){
+            found = findByID(root, x);
+        }
+        end = system_clock::now();
+        elapsed = duration_cast <microseconds>(end - start);
+        cout << elapsed.count() << " micros to find everything BST\n";
 
         start = system_clock::now();
         for(int x : v){
@@ -87,7 +103,6 @@ int main(){
         }
         end = system_clock::now();
         elapsed = duration_cast <microseconds>(end - start);
-
         cout << elapsed.count() << " micros to delete everything-random order\n";
         //inorder(root);
 

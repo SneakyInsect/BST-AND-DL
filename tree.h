@@ -38,7 +38,7 @@ TreeNode *findByID(TreeNode *root, int ID){
 
     if(ID > root->ID)
         return findByID(root->right, ID);
-    else
+    else if(ID < root->ID)
         return findByID(root->left, ID);
 }
 
