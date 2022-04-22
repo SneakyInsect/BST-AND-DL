@@ -23,7 +23,7 @@ int main() {
         vector<int> v;
 
         ifstream inData; // ifstream - input file stream
-        inData.open("..\\outputs\\output_1.txt" + to_string(i+1) + ".txt");
+        inData.open("..\\outputs\\output_" + to_string(i+1) + ".txt");
         string inputName, inputSurname;
         int inputID; //temporary variables from input
         //cout<<i+1<<": \n";
